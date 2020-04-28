@@ -2,7 +2,6 @@ package aesgzip
 
 import (
 	"compress/gzip"
-	"fmt"
 	"io"
 	"os"
 )
@@ -31,7 +30,6 @@ func GzipEncryption(src io.Reader, dstPath string, aesKey []byte) error {
 	for {
 		n, err := src.Read(buf)
 		if err == io.EOF {
-			fmt.Println("压缩、加密完成！")
 			gzipFile.Close()
 			return nil
 		}
@@ -68,7 +66,6 @@ func DecryptUngzip(src io.Reader, dstPath string, aesKey []byte) error {
 		n, err := gzipFile.Read(buf)
 		dst.Write(buf[:n])
 		if err == io.EOF {
-			fmt.Println("解密、解压完成!")
 			return nil
 		}
 	}
