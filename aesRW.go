@@ -8,7 +8,7 @@ import (
 )
 
 // aes 初始化向量
-var iv []byte = []byte("0123456789876543")
+var IV []byte = []byte("0123456789876543")
 
 // 加密轮数据大小 1M - 1B
 const roundSize int = 1024*1024 - 1
@@ -43,7 +43,7 @@ func Encrypt(origData []byte, key []byte) ([]byte, error) {
 		return nil, err
 	}
 	blockSize := block.BlockSize()
-	blockMode := cipher.NewCBCEncrypter(block, iv)
+	blockMode := cipher.NewCBCEncrypter(block, IV)
 
 	origData = PKCS5Padding(origData, blockSize)
 	ciphertxt := make([]byte, len(origData))
@@ -63,7 +63,7 @@ func Decrypt(crypted []byte, key []byte) ([]byte, error) {
 	}
 
 	//blockSize := block.BlockSize()
-	blockMode := cipher.NewCBCDecrypter(block, iv)
+	blockMode := cipher.NewCBCDecrypter(block, IV)
 
 	origData := make([]byte, len(crypted))
 
@@ -111,7 +111,7 @@ func NewAesEncryptW(f io.WriteCloser, aesKey []byte) (*AesEncryptW, error) {
 // @return 		加密后数据长度
 func (e *AesEncryptW) encrypt(origData []byte) int {
 	origData = PKCS5Padding(origData, e.blockSize)
-	blockMode := cipher.NewCBCEncrypter(e.block, iv)
+	blockMode := cipher.NewCBCEncrypter(e.block, IV)
 	blockMode.CryptBlocks(e.tmp, origData)
 	return len(origData)
 }
@@ -214,7 +214,7 @@ func (d *AesDecryptW) decrypt(ciphertext []byte) (n int) {
 	if l == 0 {
 		return 0
 	}
-	blockMode := cipher.NewCBCDecrypter(d.block, iv)
+	blockMode := cipher.NewCBCDecrypter(d.block, IV)
 	blockMode.CryptBlocks(d.tmp, ciphertext)
 	n = d.pkcs5UnPadding(d.tmp[:l])
 	return n
@@ -294,7 +294,7 @@ func NewAesEncrypt(f io.Reader, aesKey []byte) (*AesEncrypt, error) {
 		aesKey:    aesKey,
 		block:     block,
 		blockSize: blockSize,
-		blockMode: cipher.NewCBCEncrypter(block, iv),
+		blockMode: cipher.NewCBCEncrypter(block, IV),
 		buf:       buf[:n],
 	}, nil
 }
@@ -391,7 +391,7 @@ func (d *AesDecryptR) decrypt(ciphertext, tmp []byte) (n int) {
 	if l == 0 {
 		return 0
 	}
-	blockMode := cipher.NewCBCDecrypter(d.block, iv)
+	blockMode := cipher.NewCBCDecrypter(d.block, IV)
 	blockMode.CryptBlocks(tmp, ciphertext)
 	n = d.pkcs5UnPadding(tmp[:l])
 	return n

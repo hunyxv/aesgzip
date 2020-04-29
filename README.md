@@ -9,6 +9,11 @@ import (
 	"github.com/hunyxv/aesgzip"
 )
 
+func init () {
+	// 修改 aes 初始化变量(16字节)
+	aesgzip.IV  = []byte("90-b@de.ghi^765=")
+}
+
 func main() {
 	aesKey := []byte("123abc456def7890")
 
@@ -40,11 +45,11 @@ func main() {
 	}
 
 	// 一句话加解密
-	text := []byte("Hello World !")
-	fmt.Println(text)
+	text := []byte("How are you? I'm fine, thanks!")
+	fmt.Println("aes加密前：", text)
 	aesText, _ := aesgzip.Encrypt(text, aesKey)
-	fmt.Println(aesText)
+	fmt.Println("aes加密后：", aesText)
 	pText, _ := aesgzip.Decrypt(aesText, aesKey)
-	fmt.Println(pText)
+	fmt.Println("aes解密后：", pText)
 }
 ```
