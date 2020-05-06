@@ -51,5 +51,31 @@ func main() {
 	fmt.Println("aes加密后：", aesText)
 	pText, _ := aesgzip.Decrypt(aesText, aesKey)
 	fmt.Println("aes解密后：", pText)
+
+	// 一句话加密并压缩 和 解密解压缩
+	data := []byte(`{
+		"version": "0.1",
+		"timestamp": 1586519299,
+		"param": {
+			"type": 1,
+			"list": [
+				{"video_id": "v_19rwstgyo4", "update_time": 1586514239, "event": "Update"},
+				{"video_id": "v_19rsd3g6o4", "update_time": 1586514249, "event": "Update"},
+				{"video_id": "v_19rws3jjr9", "update_time": 1586514259, "event": "Update"}
+			]
+		}
+	}`)
+
+	xx, err := aesgzip.RowGzipEncryption(data, key)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(xx)
+
+	xd, err := aesgzip.RowDecryptUngzip(xx, key)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(xd)
 }
 ```
