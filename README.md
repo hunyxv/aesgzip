@@ -66,13 +66,13 @@ func main() {
 		}
 	}`)
 
-	xx, err := aesgzip.RowGzipEncryption(data, key)
+	xx, err := aesgzip.RowGzipEncryption(data, aesKey)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	fmt.Println(xx)
 
-	xd, err := aesgzip.RowDecryptUngzip(xx, key)
+	xd, err := aesgzip.RowDecryptUngzip(xx, aesKey)
 	if err != nil {
 		log.Fatalln(err)
 	}
